@@ -47,6 +47,7 @@ var phantomcss = require(phantomCSSPath + s + 'phantomcss.js');
 
 phantomcss.init({
   screenshotRoot: args.screenshots,
+  comparisonResultRoot: args.comparisonResultRoot,
   failedComparisonsRoot: args.failures,
   libraryRoot: phantomCSSPath, // Give absolute path, otherwise PhantomCSS fails
   mismatchTolerance: args.mismatchTolerance, // defaults to 0.05
@@ -63,14 +64,6 @@ phantomcss.init({
   onComplete: function(allTests, noOfFails, noOfErrors) {
     sendMessage('onComplete', allTests, noOfFails, noOfErrors);
   },
-  fileNameGetter: function(root, filename) {
-    var name = phantomcss.pathToTest + args.screenshots + '/' + filename;
-    if (fs.isFile(name + '.png')) {
-      return name + '.diff.png';
-    } else {
-      return name + '.png';
-    }
-  },
 });
 
 casper.start();
@@ -78,9 +71,7 @@ casper.start();
 args.test.forEach(function(testSuite) {
   phantom.casperTest = true;
   phantom.rootUrl = args.rootUrl;
-  casper.then(function() {
-    phantomcss.pathToTest = path.dirname(testSuite) + '/';
-  });
+  
   require(testSuite);
   casper.then(function() {
     phantomcss.compareSession();

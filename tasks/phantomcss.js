@@ -58,6 +58,8 @@ module.exports = function(grunt) {
     var options = this.options({
       rootUrl: false,
       screenshots: 'screenshots',
+      comparisonResultRoot: 'results',
+      failures: 'failures',
       results: 'results',
       viewportSize: [1280, 800],
       mismatchTolerance: 0.05,
@@ -203,7 +205,8 @@ module.exports = function(grunt) {
 
     // Put failure screenshots in the same place as source screenshots, we'll move/delete them after the test run
     // Note: This duplicate assignment is provided for clarity; PhantomCSS will put failures in the screenshots folder by default
-    options.failures = options.screenshots;
+	// Extra Note: failures should go in the failures folder, otherwise set the failures folder in the grunt settings file to the same name as screenshots
+    // options.failures = options.screenshots;
 
     // Pass necessary paths
     options.tempFile = tempFile.path;
